@@ -1,4 +1,4 @@
-locationmap <- function(locationdata, mapname, num){
+ggmap3 <- function(locationdata, mapname, num){
 	data <-  NULL
 	for(count in 1:nrow(locationdata)){
 		location <- locationdata[count, num]
