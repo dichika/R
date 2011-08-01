@@ -1,9 +1,5 @@
-library(hwriter)
-
-
-samplefmt <- read.csv("sample.csv", as.is=TRUE)
-
 mkhtml <- function(filename, data, foot=TRUE, charset="CP932", lang="JP"){
+@@require(hwriter)
   p <- openPage(filename, charset=charset, lang=lang)
   if(is.data.frame(data))data <- as.matrix(data)
   hwrite(hmakeTag("style","
@@ -48,12 +44,31 @@ mkhtml <- function(filename, data, foot=TRUE, charset="CP932", lang="JP"){
   targ <- ifelse(foot, nrow(data)-1, nrow(data))
   for(i in 2:targ){
     ROW <- data[i,]
-    if(!as.numeric(ROW[3])){
-      hwrite(ROW[1], p, br=TRUE, contenteditable="TRUE", class=ROW[2], div=TRUE)
-      }else{
-      hwriteImage(ROW[1], p, br=TRUE, div=TRUE)
-      }
-  }  
+    content <- unlist(strsplit(split="\\|", ROW[1]))
+     if(length(content)>1){
+         if(isTRUE(as.logical(grep(".*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.tiff$", content, perl=TRUE))) && nchar(content) < 15){
+         type <- "DI"
+         }else if(isTRUE(as.logical(grep(".*\\.htm$|.*\\.html$", content, perl=TRUE))) && nchar(content) < 15){
+         type <- "DH"
+         }       
+     }else{
+       if(isTRUE(as.logical(grep(".*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.tiff$", content, perl=TRUE))) && nchar(ROW[1]) < 15){
+         type <- "I"
+         }else if(isTRUE(as.logical(grep(".*\\.htm$|.*\\.html$", content, perl=TRUE)))){
+         type <- "H"
+         }else{
+         type <- "T"
+         }
+     }
+     switch(type,
+       "T" = hwrite(content, p, br=TRUE, contenteditable="TRUE", class=ROW[2], div=TRUE),
+       "I" = hwriteImage(content, p, br=TRUE, div=TRUE, center=TRUE, border=0),
+       "DI" = hwriteImage(content, p, br=TRUE, div=TRUE, center=TRUE, border=0),
+       "H" = hwrite(paste('<iframe src=', content, ' frameborder="0" width="1200" height="600" scrolling="no"></iframe>', sep=""), p, center=TRUE),
+       "DH" = hwrite(c(paste('<iframe src=', content, ' frameborder="0" width="600" height="400" scrolling="no"></iframe>', sep=""),paste('<iframe src=', content, ' frameborder="0" width="600" height="400" scrolling="no"></iframe>', sep="")), p, center=TRUE),
+       stop(message = ifelse(grep("Japanese", Sys.getlocale("LC_CTYPE")), "Ú²±³Ä¶ÞÖ¸Ü¶ØÏ¾Ý", "rayout error"))
+       )
+    }
   if(foot){
     hwrite(data[nrow(data),1], p, br=TRUE, contenteditable="TRUE", class="foot", div=TRUE)
     closePage(p, splash=FALSE)
