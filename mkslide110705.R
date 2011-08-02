@@ -1,13 +1,14 @@
+setwd("D:/My Dropbox/batade/")
+
 css <- "D:/My Dropbox/batade/CSSslide.css"
 js <- "D:/My Dropbox/batade/CSSslide.js"
 
-setwd("D:/My Dropbox/batade/")
 
 #presentationlist
 lis <- list(
-c("タイトル1", "ここにほげほげ"),
-c("タイトル2", "つぎになにを入れるか","こういう形のリストは"),
-c("タイトル3", "箇条書きもいれときたい","こういう形で","こんな感じ")
+c("title1", "hogehoge"),
+c("title2", "what's next","an example"),
+c("title3", "kajougaki","a type","or so")
 )
 
 mkslide <- function(txt, file, css, js, charset="CP932"){
@@ -19,7 +20,7 @@ mkslide <- function(txt, file, css, js, charset="CP932"){
       hwrite(str_c(title, txt[2]), div=TRUE)
       }else{
       kajougaki <- str_c(hmakeTag("li",txt[-1]),collapse="")
-      kajougaki <- str_c("<ul>",line, "</ul>")
+      kajougaki <- str_c("<ul>", kajougaki, "</ul>")
       hwrite(str_c(title, kajougaki), div=TRUE)
       }
     }
