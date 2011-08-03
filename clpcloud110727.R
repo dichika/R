@@ -1,4 +1,5 @@
-#wordcloud‚ğ‚¿‚å‚Á‚Æ•ÏX‚·‚é
+#This code includes two functions "wordcloud2" & "clpcloud".
+
 wordcloud2 <- function (words, freq, scale = c(4, 0.5), min.freq = 3, max.words = Inf, 
     random.order = TRUE, rot.per = 0.1, colors = "black", use.r.layout = FALSE, 
     ...) 
@@ -94,7 +95,7 @@ wordcloud2 <- function (words, freq, scale = c(4, 0.5), min.freq = 3, max.words 
     invisible()
 }
 
-#clpcloud‚à­‚µè’¼‚µ
+
 clpcloud <- function(type=NULL, min=1, ...){
   require(RMeCab)
   require(wordcloud)
@@ -127,9 +128,3 @@ clpcloud <- function(type=NULL, min=1, ...){
     wordcloud(res$word, res$count, min.freq=min, colors=pal, ...)
   }
 }
-
-windowsFonts(JP1 = windowsFont("MS Mincho"),
-             JP2 = windowsFont("MS Gothic"),
-             JP3 = windowsFont("Arial Unicode MS"),
-             JP4 = windowsFont("Meiryo UI"),
-             JP5 = windowsFont("HGMaruGothicMPRO"))
