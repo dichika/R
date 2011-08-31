@@ -1,5 +1,4 @@
-
-comparePlot <- function(urldata1, urldata2, data1name="data1", data2name="data2"){
+comparePlot <- function(urldata1, urldata2, data1name="data1", data2name="data2", plot=TRUE){
   require(rdatamarket)
   require(googleVis)
   require(ggplot2)
@@ -19,13 +18,9 @@ comparePlot <- function(urldata1, urldata2, data1name="data1", data2name="data2"
   colnames(result) <- c("year", "country", data1name, data2name)
   result$year <- as.Date(paste(sep="/", result$year, "01/01"))
   M <- gvisMotionChart(result, idvar="country", timevar="year")
-  invisible(M)
+    if(plot==TRUE){
+      plot(M)
+      }else{
+      invisible(M)
+      }
   }
-urldata1 <- "http://datamarket.com/data/set/15nl/gini-index#display=line&ds=15nl|ho8"
-urldata2 <- "http://datamarket.com/data/set/15n6/health-expenditure-public-of-gdp#display=line&ds=15n6|hnt"
-data1name <- "GINI"
-data2name <- "HEperGDP"
-
-M <- comparePlot(urldata1, urldata2, data1name, data2name)
-ggd <- createGoogleGadget(M)
-write(ggd,"sample.xml")
