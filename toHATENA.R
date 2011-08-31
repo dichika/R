@@ -25,3 +25,21 @@ out <- paste(sep="", unlist(strsplit(split="\\.", trg))[1], "code.txt")
 hatenafilename <- paste(sep="/", localDBP, out)
 write(reshatena, hatenafilename)
 }
+
+toHATENA2 <- function(gvisobj, XMLname, localDBP="D:/My Dropbox/Public", pubDBP="http://dl.dropbox.com/u/956851"){
+  # for "gvis" class object
+  require(RHTMLForms)
+  ggd <- createGoogleGadget(gvisobj)
+  write(ggd, paste(sep="/", localDBP, XMLname))
+  #send XML as GoogleGadget
+  forms <-  getHTMLFormDescription("http://www.google.com/ig/submit")
+  fun <-  createFunction(forms[[2]])
+  webDBP <- paste(sep="/", pubDBP, XMLname)
+  fun(url = webDBP)
+
+  #toHatena
+  reshatena <- paste(sep="", '<script src="http://www.gmodules.com/ig/ifr?url=', webDBP,'&amp;synd=open&amp;w=580&amp;h=450&amp;title=&amp;border=%23ffffff%7C3px%2C1px+solid+%23999999&amp;output=js"></script>')
+  out <- "hatenagggd.txt"
+  hatenafilename <- paste(sep="/", localDBP, out)
+  write(reshatena, hatenafilename)
+  }
